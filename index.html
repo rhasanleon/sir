@@ -1087,16 +1087,27 @@ svg {
     }
   }
 
+  function resolvedCssColor(variableName) {
+    const probe = document.createElement("span");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.pointerEvents = "none";
+    probe.style.color = `var(${variableName})`;
+    root.appendChild(probe);
+    const resolvedColor = window.getComputedStyle(probe).color;
+    probe.remove();
+    return resolvedColor;
+  }
+
   function visualColors() {
-    const styles = window.getComputedStyle(root);
     return {
-      susceptible: styles.getPropertyValue("--viz-series-1").trim(),
-      infected: styles.getPropertyValue("--viz-series-2").trim(),
-      recovered: styles.getPropertyValue("--viz-series-3").trim(),
-      foreground: styles.getPropertyValue("--foreground").trim(),
-      mutedForeground: styles.getPropertyValue("--muted-foreground").trim(),
-      border: styles.getPropertyValue("--border").trim(),
-      background: styles.getPropertyValue("--card").trim()
+      susceptible: resolvedCssColor("--viz-series-1"),
+      infected: resolvedCssColor("--viz-series-2"),
+      recovered: resolvedCssColor("--viz-series-3"),
+      foreground: resolvedCssColor("--foreground"),
+      mutedForeground: resolvedCssColor("--muted-foreground"),
+      border: resolvedCssColor("--border"),
+      background: resolvedCssColor("--background")
     };
   }
 
